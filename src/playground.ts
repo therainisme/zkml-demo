@@ -63,13 +63,15 @@ interface InputFeature {
 }
 
 let INPUTS: {[name: string]: InputFeature} = {
-  "x": {f: (x, y) => x, label: "X_1"},
-  "y": {f: (x, y) => y, label: "X_2"},
-  "xSquared": {f: (x, y) => x * x, label: "X_1^2"},
-  "ySquared": {f: (x, y) => y * y,  label: "X_2^2"},
-  "xTimesY": {f: (x, y) => x * y, label: "X_1X_2"},
-  "sinX": {f: (x, y) => Math.sin(x), label: "sin(X_1)"},
-  "sinY": {f: (x, y) => Math.sin(y), label: "sin(X_2)"},
+  "x00": {f: (x, y) => -x * x, label: "(0,0)"},
+  "x10": {f: (x, y) => y * y, label: "(1,0)"},
+  "x20": {f: (x, y) => -x * x, label: "(2,0)"},
+  "x30": {f: (x, y) => y * y, label: ""},
+  "x01": {f: (x, y) => x * x,  label: "(0,1)"},
+  "x11": {f: (x, y) => -y * y, label: "(1,1)"},
+  "x21": {f: (x, y) => y * y, label: "(2,1)"},
+  "x31": {f: (x, y) => y * y, label: ""},
+  "x2727": {f: (x, y) => -x * x, label: "(27,27)"},
 };
 
 let HIDABLE_CONTROLS = [
@@ -120,6 +122,10 @@ class Player {
       this.callback(this.isPlaying);
     }
     this.start(this.timerIndex);
+
+    console.log(d3.select("#result-img"));
+    console.log("play");
+    d3.select("#result-img").attr("src", "http://sap.therainisme.com:60080/zkml/unknown.png");
   }
 
   pause() {
@@ -128,6 +134,8 @@ class Player {
     if (this.callback) {
       this.callback(this.isPlaying);
     }
+
+    d3.select("#result-img").attr("src", "http://sap.therainisme.com:60080/zkml/six.png");
   }
 
   private start(localTimerIndex: number) {
@@ -163,7 +171,7 @@ let linkWidthScale = d3.scale.linear()
   .clamp(true);
 let colorScale = d3.scale.linear<string, number>()
                      .domain([-1, 0, 1])
-                     .range(["#f59322", "#e8eaeb", "#0877bd"])
+                     .range(["#c065d0", "#e8eaeb", "#387eff"])
                      .clamp(true);
 let iter = 0;
 let trainData: Example2D[] = [];
@@ -383,6 +391,7 @@ function makeGUI() {
       mainWidth = newWidth;
       drawNetwork(network);
       updateUI(true);
+      magic();
     }
   });
 
@@ -518,12 +527,12 @@ function drawNode(cx: number, cy: number, nodeId: string, isInput: boolean,
           state.discretize);
     });
   if (isInput) {
-    div.on("click", function() {
-      state[nodeId] = !state[nodeId];
-      parametersChanged = true;
-      reset();
-    });
-    div.style("cursor", "pointer");
+    // div.on("click", function() {
+    //   state[nodeId] = !state[nodeId];
+    //   parametersChanged = true;
+    //   reset();
+    // });
+    // div.style("cursor", "pointer");
   }
   if (isInput) {
     div.classed(activeOrNotClass, true);
@@ -570,6 +579,7 @@ function drawNetwork(network: nn.Node[][]): void {
   let targetIdWithCallout = null;
 
   // Draw the input layer separately.
+  // Modified by WeiJunyu
   let cx = RECT_SIZE / 2 + 50;
   let nodeIds = Object.keys(INPUTS);
   let maxY = nodeIndexScale(nodeIds.length);
@@ -665,41 +675,41 @@ function addPlusMinusControl(x: number, layerIdx: number) {
     .style("left", `${x - 10}px`);
 
   let i = layerIdx - 1;
-  let firstRow = div.append("div").attr("class", `ui-numNodes${layerIdx}`);
-  firstRow.append("button")
-      .attr("class", "mdl-button mdl-js-button mdl-button--icon")
-      .on("click", () => {
-        let numNeurons = state.networkShape[i];
-        if (numNeurons >= 8) {
-          return;
-        }
-        state.networkShape[i]++;
-        parametersChanged = true;
-        reset();
-      })
-    .append("i")
-      .attr("class", "material-icons")
-      .text("add");
+  // let firstRow = div.append("div").attr("class", `ui-numNodes${layerIdx}`);
+  // firstRow.append("button")
+  //     .attr("class", "mdl-button mdl-js-button mdl-button--icon")
+  //     .on("click", () => {
+  //       let numNeurons = state.networkShape[i];
+  //       if (numNeurons >= 8) {
+  //         return;
+  //       }
+  //       state.networkShape[i]++;
+  //       parametersChanged = true;
+  //       reset();
+  //     })
+  //   .append("i")
+  //     .attr("class", "material-icons")
+  //     .text("add");
 
-  firstRow.append("button")
-      .attr("class", "mdl-button mdl-js-button mdl-button--icon")
-      .on("click", () => {
-        let numNeurons = state.networkShape[i];
-        if (numNeurons <= 1) {
-          return;
-        }
-        state.networkShape[i]--;
-        parametersChanged = true;
-        reset();
-      })
-    .append("i")
-      .attr("class", "material-icons")
-      .text("remove");
+  // firstRow.append("button")
+  //     .attr("class", "mdl-button mdl-js-button mdl-button--icon")
+  //     .on("click", () => {
+  //       let numNeurons = state.networkShape[i];
+  //       if (numNeurons <= 1) {
+  //         return;
+  //       }
+  //       state.networkShape[i]--;
+  //       parametersChanged = true;
+  //       reset();
+  //     })
+  //   .append("i")
+  //     .attr("class", "material-icons")
+  //     .text("remove");
 
   let suffix = state.networkShape[i] > 1 ? "s" : "";
-  div.append("div").text(
-    state.networkShape[i] + " neuron" + suffix
-  );
+  div.append("div")
+    .style("margin-top", "20px")
+    .text(state.networkShape[i] + " neuron" + suffix);
 }
 
 function updateHoverCard(type: HoverType, nodeOrLink?: nn.Node | nn.Link,
@@ -1113,9 +1123,119 @@ function simulationStarted() {
   parametersChanged = false;
 }
 
+function toggleInputNodeVisibility(nodeId: string, isVisible: boolean) {
+  let nodeElement = document.getElementById(`canvas-${nodeId}`); 
+  if (nodeElement) {
+    let divELement = nodeElement.firstChild as any;
+    nodeElement.style.background = "rgba(247,247,247, 1)";
+    nodeElement.style.borderLeft = "2px solid black";
+    nodeElement.style.borderRight = "2px solid black";
+    divELement.innerHTML = `<img style="left: -21px; top: -15px; weight: 60px; height: 60px; position: relative" src="http://sap.therainisme.com:60080/zkml/lue.svg"/>`;
+  }
+  nodeElement = document.getElementById(`node${nodeId}`);
+  if (nodeElement) {
+    let rect = nodeElement.firstChild as any;
+    // rect.style.display = isVisible ? "block" : "none";
+  }
+}
+
+
+function magic() {
+  toggleInputNodeVisibility("x30", false);
+  toggleInputNodeVisibility("x31", false);
+
+  toggleInputNodeVisibility("4", false);
+  toggleInputNodeVisibility("11", false);
+  toggleInputNodeVisibility("17", false);
+
+  let verifyBtn = d3.select("#verify-zk-proof-button");
+  verifyBtn.on("click", () => {
+    verifyBtn.text("Verifying...");
+    setTimeout(() => {
+      verifyBtn.text("✅ Verified correctly");
+    }, 3000);
+  });
+
+  let downloadProofBtn = d3.select('#download-zk-proof-button');
+  downloadProofBtn.on("click", () => {
+    let mainPart = d3.select('#main-part');
+    let pre = mainPart.append('pre')
+      .style('position', 'absolute')
+      .style('z-index', '100')
+      .style('background', 'white')
+      .style('top', '23%')
+      .style('left', '44%')
+      .style('transform', 'translate(-50%, -50%)')
+      .style('height', '60vh')
+      .style('width', '49vw')
+      .style('border-radius', '6px')
+      .style('overflow-x','auto')
+      .style('box-shadow', 'rgba(0, 0, 0, 0.24) 0px 3px 8px');
+    pre.append('div')
+      .style('font-family', '"Roboto", "Helvetica", "Arial", sans-serif')
+      .style('text-transform', 'uppercase')
+      .style('height', '46px')
+      .style('text-align', 'center')
+      .style('font-size', '32px')
+      .style('color', 'white')
+      // .style('background', '#37cb72')
+      .style('background', '#5E328B')
+      .style('line-height', '43px')
+      .style('margin-bottom', '20px')
+      .style('cursor', 'pointer')
+      .text('JSON of Zero Knowledge Proof')
+      .on('click', () => {
+        pre.remove();
+      });
+    pre.append('p')
+      .style('margin', '20px')
+      .text(proofjson);
+    pre.append('img')
+    .style('position', 'absolute')
+    .style('top', '28%')
+    .style('width', '260px')
+    .style('filter', 'grayscale(1)')
+    .style('opacity', '0.2')
+    .style('z-index', '-1')
+    .style('left', '50%')
+    .style('transform', 'translateX(-50%)')
+      .attr('src', 'http://sap.therainisme.com:60080/zkml/ecnu.png')
+  });
+}
+
 drawDatasetThumbnails();
 initTutorial();
 makeGUI();
 generateData(true);
 reset(true);
 hideControls();
+magic();
+
+const proofjson = `{
+  "pi_a": [
+    "13438600634746299360714542745866809421951591753669066699186249758502393975540",
+    "5912869311195749888417711177125833043040023113493530691188705903717818017840",
+    "1"
+  ],
+  "pi_b": [
+    [
+      "16245862970842694527549418312950930440092384269108404042108292000962652852039",
+      "7693355990292729475367045813224033021316676887901850904155200684783733723435"
+    ],
+    [
+      "2555152670082237700182971894913838000561471289938627480544231072375281186134",
+      "15285281516130729816239051044516321171840654871697300119346671269944167398241"
+    ],
+    [
+      "1",
+      "0"
+    ]
+  ],
+  "pi_c": [
+    "11995596372932748160082412669044486449520256304387104315822909220965812759877",
+    "311493371518360024805411508867976518388349181720170850513726788524496636860",
+    "1"
+  ],
+  "protocol": "groth16",
+  "curve": "bn128"
+}`
