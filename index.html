@@ -50,10 +50,10 @@ limitations under the License.
   </a> -->
   <!-- Header -->
   <header>
-    <img style="top: 50%; transform: translateY(-50%); left: 20px; border: 2px solid white; width: 100px; position: absolute;" src="http://sap.therainisme.com:60080/zkml/dase.png"></img>
-    <img style="top: 50%; transform: translateY(-50%); left: 145px; border: 2px solid white; width: 100px; position: absolute;" src="http://sap.therainisme.com:60080/zkml/star.jpg"></img>
+    <img style="top: 50%; transform: translateY(-50%); left: 20px; border: 2px solid white; width: 100px; position: absolute;" src="https://asset.therainisme.com/zkml/dase.png"></img>
+    <img style="top: 50%; transform: translateY(-50%); left: 145px; border: 2px solid white; width: 100px; position: absolute;" src="https://asset.therainisme.com/zkml/star.jpg"></img>
     <h1 class="l--page"><b>Zero Knowledge Proof of Machine Learning</b></h1>
-    <img style="top: 50%; transform: translateY(-50%); right: 20px; width: 110px; position: absolute; background: white; border-radius: 50%;" src="http://sap.therainisme.com:60080/zkml/ecnu.png"></img>
+    <img style="top: 50%; transform: translateY(-50%); right: 20px; width: 110px; position: absolute; background: white; border-radius: 50%;" src="https://asset.therainisme.com/zkml/ecnu.png"></img>
   </header>
 
   <!-- Top Controls -->
@@ -153,7 +153,7 @@ limitations under the License.
       </h4>
       <div class="ui-dataset">
         <p>Click the button below to generate a picture of the handwritten digits.</p>
-        <img style="top: 13px; width: 100%; position: relative;" src="http://sap.therainisme.com:60080/zkml/594.png"></img>
+        <img id="ml-target-img" style="top: 13px; width: 100%; position: relative;" src="https://asset.therainisme.com/zkml/6.png"></img>
         <button style="margin-top: 30px;" class="basic-button" id="data-auto-regen-button" title="Regenerate data">
           Auto Regen
         </button>
@@ -276,13 +276,17 @@ limitations under the License.
     <div class="column output">
       <h4>Output</h4>
       <p>The numbers predicted by the network, the ones we output are the standard ones, and the zk proof.</p>
-      <img id="result-img" style="top: 30px; width: 100%; position: relative;" src="http://sap.therainisme.com:60080/zkml/unknown.png"></img>
+      <img id="result-img" style="top: 30px; width: 100%; position: relative;" src="https://asset.therainisme.com/zkml/unknown.png"></img>
       <button style="margin-top: 50px;" class="basic-button" id="download-zk-proof-button" title="Regenerate data">
         Download ZK Proof
       </button>
       <button style="margin-top: 10px;" class="basic-button" id="verify-zk-proof-button" title="Regenerate data">
         Verify ZK Proof
       </button>
+      <!-- 后面再说 -->
+      <!-- <button style="margin-top: 10px;" class="basic-button" id="verify-zk-proof-button" title="Regenerate data">
+        VIEW EVIDENCE
+      </button> -->
       
       <div class="metrics" style="visibility: hidden;">
         <div class="output-stats ui-percTrainData">
@@ -341,7 +345,7 @@ limitations under the License.
   </div>
   <!-- Article -->
 
-  <article id="article-text">
+  <!-- <article id="article-text">
     <div class="l--body">
       <h2>Um, What Is a Neural Network?</h2>
       <p>It’s a technique for building a computer program that learns from data. It is based very loosely on how we think the human brain works. First, a collection of software “neurons” are created and connected together, allowing them to send messages to each other. Next, the network is asked to solve a problem, which it attempts to do over and over, each time strengthening the connections that lead to success and diminishing those that lead to failure. For a more detailed introduction to neural networks, Michael Nielsen’s <a href="http://neuralnetworksanddeeplearning.com/index.html">Neural Networks and Deep Learning</a> is a good place to start. For a more technical overview, try <a href="http://www.deeplearningbook.org/">Deep Learning</a> by Ian Goodfellow, Yoshua Bengio, and Aaron Courville.</p>
@@ -380,7 +384,7 @@ limitations under the License.
         <a href="https://research.google.com/bigpicture/">Big Picture</a> and <a href="https://research.google.com/teams/brain/">Google Brain</a> teams for feedback and guidance.
       </p>
     </div>
-  </article>
+  </article> -->
 
   <!-- Footer -->
   <footer>

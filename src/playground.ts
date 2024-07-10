@@ -125,7 +125,7 @@ class Player {
 
     console.log(d3.select("#result-img"));
     console.log("play");
-    d3.select("#result-img").attr("src", "http://sap.therainisme.com:60080/zkml/unknown.png");
+    d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/unknown.png");
   }
 
   pause() {
@@ -135,7 +135,40 @@ class Player {
       this.callback(this.isPlaying);
     }
 
-    d3.select("#result-img").attr("src", "http://sap.therainisme.com:60080/zkml/six.png");
+    const number = d3.select("#ml-target-img").attr("src").substring(34, 35);
+    console.log(number);
+    switch (number) {
+      case "0":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/zero.png");
+        break;
+      case "1":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/one.png");
+        break;
+      case "2":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/two.png");
+        break;
+      case "3":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/three.png");
+        break;
+      case "4":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/four.png");
+        break;
+      case "5":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/five.png");
+        break;
+      case "6":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/six.png");
+        break;
+      case "7":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/seven.png"); 
+        break;
+      case "8":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/eight.png");    
+        break;
+      case "9":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/nine.png");
+        break;
+    }
   }
 
   private start(localTimerIndex: number) {
@@ -1130,7 +1163,7 @@ function toggleInputNodeVisibility(nodeId: string, isVisible: boolean) {
     nodeElement.style.background = "rgba(247,247,247, 1)";
     nodeElement.style.borderLeft = "2px solid black";
     nodeElement.style.borderRight = "2px solid black";
-    divELement.innerHTML = `<img style="left: -21px; top: -15px; weight: 60px; height: 60px; position: relative" src="http://sap.therainisme.com:60080/zkml/lue.svg"/>`;
+    divELement.innerHTML = `<img style="left: -21px; top: -15px; weight: 60px; height: 60px; position: relative" src="https://asset.therainisme.com/zkml/lue.svg"/>`;
   }
   nodeElement = document.getElementById(`node${nodeId}`);
   if (nodeElement) {
@@ -1156,6 +1189,14 @@ function magic() {
     }, 3000);
   });
 
+  let autoRegenBtn = d3.select("#data-auto-regen-button");
+  autoRegenBtn.on("click", () => {
+    // 随机 0 到 9 之间的一个数字
+    let randomNum = Math.floor(Math.random() * 10);
+    d3.select("#ml-target-img").attr("src", `http://asset.therainisme.com/zkml/${randomNum}.png`);
+    d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/unknown.png");
+  });
+  
   let downloadProofBtn = d3.select('#download-zk-proof-button');
   downloadProofBtn.on("click", () => {
     let mainPart = d3.select('#main-part');
@@ -1199,7 +1240,7 @@ function magic() {
     .style('z-index', '-1')
     .style('left', '50%')
     .style('transform', 'translateX(-50%)')
-      .attr('src', 'http://sap.therainisme.com:60080/zkml/ecnu.png')
+      .attr('src', 'https://asset.therainisme.com/zkml/ecnu.png')
   });
 }
 
