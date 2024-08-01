@@ -159,6 +159,9 @@ class Player {
       case "6":
         d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/six.png");
         break;
+      case "/":
+        d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/six.png");
+        break;
       case "7":
         d3.select("#result-img").attr("src", "https://asset.therainisme.com/zkml/seven.png"); 
         break;
@@ -227,6 +230,10 @@ function makeGUI() {
     // Change the button's content.
     userHasInteracted();
     player.playOrPause();
+
+    setTimeout(() => {
+      player.playOrPause();
+    }, 3000);
   });
 
   player.onPlayPause(isPlaying => {
@@ -1183,10 +1190,15 @@ function magic() {
 
   let verifyBtn = d3.select("#verify-zk-proof-button");
   verifyBtn.on("click", () => {
+    if (d3.select("#result-img").attr("src") === "https://asset.therainisme.com/zkml/unknown.png") {
+      alert("Not running.");
+      return;
+    }
+
     verifyBtn.text("Verifying...");
     setTimeout(() => {
       verifyBtn.text("✅ Verified correctly");
-    }, 3000);
+    }, 1000);
   });
 
   let autoRegenBtn = d3.select("#data-auto-regen-button");
@@ -1199,6 +1211,11 @@ function magic() {
   
   let downloadProofBtn = d3.select('#download-zk-proof-button');
   downloadProofBtn.on("click", () => {
+    if (d3.select("#result-img").attr("src") === "https://asset.therainisme.com/zkml/unknown.png") {
+      alert("Not running.");
+      return;
+    }
+
     let mainPart = d3.select('#main-part');
     let pre = mainPart.append('pre')
       .style('position', 'absolute')
@@ -1230,7 +1247,7 @@ function magic() {
       });
     pre.append('p')
       .style('margin', '20px')
-      .text(proofjson);
+      .text(proofJson());
     pre.append('img')
     .style('position', 'absolute')
     .style('top', '28%')
@@ -1252,31 +1269,45 @@ reset(true);
 hideControls();
 magic();
 
-const proofjson = `{
-  "pi_a": [
-    "13438600634746299360714542745866809421951591753669066699186249758502393975540",
-    "5912869311195749888417711177125833043040023113493530691188705903717818017840",
-    "1"
-  ],
-  "pi_b": [
-    [
-      "16245862970842694527549418312950930440092384269108404042108292000962652852039",
-      "7693355990292729475367045813224033021316676887901850904155200684783733723435"
+function generateRandomNumberString(length) {
+  let result = '';
+  const characters = '0123456789';
+  const charactersLength = characters.length;
+  
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  
+  return result;
+}
+
+function proofJson() {
+  return `{
+    "pi_a": [
+      "${generateRandomNumberString(77)}",
+      "${generateRandomNumberString(76)}",
+      "1"
     ],
-    [
-      "2555152670082237700182971894913838000561471289938627480544231072375281186134",
-      "15285281516130729816239051044516321171840654871697300119346671269944167398241"
+    "pi_b": [
+      [
+        "${generateRandomNumberString(77)}",
+        "${generateRandomNumberString(76)}"
+      ],
+      [
+        "${generateRandomNumberString(76)}",
+        "${generateRandomNumberString(77)}"
+      ],
+      [
+        "1",
+        "0"
+      ]
     ],
-    [
-      "1",
-      "0"
-    ]
-  ],
-  "pi_c": [
-    "11995596372932748160082412669044486449520256304387104315822909220965812759877",
-    "311493371518360024805411508867976518388349181720170850513726788524496636860",
-    "1"
-  ],
-  "protocol": "groth16",
-  "curve": "bn128"
-}`
+    "pi_c": [
+      "${generateRandomNumberString(77)}",
+      "${generateRandomNumberString(75)}",
+      "1"
+    ],
+    "protocol": "groth16",
+    "curve": "bn128"
+  }`
+}
